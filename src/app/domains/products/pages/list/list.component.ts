@@ -5,6 +5,8 @@ import { HeaderComponent } from '@shared/components/header/header.component';
 import { Product } from '@shared/models/product.model';
 import { CartService } from '@shared/services/cart.service';
 import { ProductService } from '@shared/services/product.service';
+import { CategoryService } from '@shared/services/category.service';
+import { Category } from '@shared/models/category.model';
 
 @Component({
   selector: 'app-list',
@@ -16,25 +18,21 @@ import { ProductService } from '@shared/services/product.service';
 export class ListComponent {
 
   products = signal<Product[]>([]);
+  categories = signal<Category[]>([]);
   private cartService = inject(CartService);
   private productService = inject(ProductService);
+  private categoryService = inject(CategoryService);
 
-  /*
   ngOnInit() {
-    this.productService.getProducts().subscribe({
-      next: (products) => {
-        this.products.set(products);
-        const product = products[0];
-        console.log(JSON.parse(product.images[0]));
-      },
-      error: (error) => {
-        console.error(error);
-      }
-    });
+    this.getProducts();
+    this.getCategories();
   }
-    */
 
-  ngOnInit() {
+  addToCart(product: Product) {
+    this.cartService.addToCart(product);
+  }
+
+  getProducts() {
     this.productService.getProducts().subscribe(res => {
       const products = res.map(product => {
         if (product.images && product.images.length > 0) {
@@ -55,9 +53,9 @@ export class ListComponent {
     });
   }
 
-
-
-  addToCart(product: Product) {
-    this.cartService.addToCart(product);
+  getCategories() {
+    this.categoryService.getCategories().subscribe(categories => {
+      this.categories.set(categories);
+    });
   }
 }

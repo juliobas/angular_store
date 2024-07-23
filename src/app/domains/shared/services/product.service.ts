@@ -12,7 +12,7 @@ export class ProductService {
   constructor() { }
 
   getProducts() {
-    return this.http.get<Product[]>('https://api.escuelajs.co/api/v1/products');
+    return this.http.get<Product[]>('https://api.escuelajs.co/api/v1/products?offset=0&limit=50');
   }
 
   getOne(id: string) {
